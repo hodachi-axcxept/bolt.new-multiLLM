@@ -1,5 +1,6 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
+import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock';
 
 export function getAnthropicModel(apiKey: string) {
   const anthropic = createAnthropic({
@@ -17,3 +18,18 @@ export function getOpenAIModel(model: string, apiKey: string) {
   return openai(model);
 }
 
+interface AWSCredentials {
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+}
+
+export function getBedrockModel(modelId: string, credentials: AWSCredentials) {
+  const bedrock = createAmazonBedrock({
+    region: credentials.region,
+    accessKeyId: credentials.accessKeyId,
+    secretAccessKey: credentials.secretAccessKey,
+  });
+
+  return bedrock(modelId);
+}

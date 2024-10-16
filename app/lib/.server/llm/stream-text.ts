@@ -1,8 +1,9 @@
 import { streamText as _streamText, convertToCoreMessages } from 'ai';
 import { getAPIKey, getOpenAIAPIKey } from '~/lib/.server/llm/api-key';
-import { getAnthropicModel, getOpenAIModel } from '~/lib/.server/llm/model';
-import { MAX_TOKENS } from './constants';
+import { getAnthropicModel, getOpenAIModel, getBedrockModel } from '~/lib/.server/llm/model';
+import { MAX_TOKENS, MAX_TOKENS_BEDROCK } from './constants';
 import { getSystemPrompt } from './prompts';
+import { getAWSCredentials } from '~/lib/.server/llm/api-key';
 
 interface ToolResult<Name extends string, Args, Result> {
   toolCallId: string;
@@ -45,4 +46,15 @@ export function streamTextOpenAI(messages: Messages, env: Env, model: string, op
   });
 }
 
-
+export function streamTextBedrock(messages: Messages, env: Env, modelId: string, options?: StreamingOptions) {
+  const credentials = getAWSCredentials(env);
+  
+  return _streamText({
+    model: getBedrockModel(modelId, credentials),
+    system: getSystemPrompt(),
+    maxTokens: MAX_TOKENS_BEDROCK,
+    messages: convertToCoreMessages(messages),
+    headers: {},
+    ...options,
+  });
+}

@@ -101,6 +101,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   <option value="gpt-4o">OpenAI GPT-4o</option>
                   <option value="o1-preview">OpenAI o1-preview</option>
                   <option value="o1-mini">OpenAI o1-mini</option>
+                  <option value="bedrock">AWS Bedrock Claude</option>
                   <option value="gemini" disabled>gemini-pro(not implemented)</option>
                 </select>
               </div>
